@@ -104,14 +104,17 @@ end
 
 function Cube:determineState(contact)
 
+    local pixelNudge = 5 
+
     if self.state == 'air' then
         if contact.floor then
             self.state = 'floor'
         elseif contact.right then
             self.state = 'rightWall'
+        elseif contact.ceiling then
+            self.state = 'ceiling'
         elseif contact.left then
-            self.state = 'celling'
-
+            self.state = 'leftWall'
         end
 
 
@@ -128,6 +131,8 @@ function Cube:determineState(contact)
             self.state = 'ceiling'
         elseif not contact.right then
             self.state = 'floor' -- right is this correct gang i'm bugguging
+            local xPositin, yPosition = self.body:getPosition()
+            self.body:setPosition(xPositin + pixelNudge, yPosition - pixelNudge)
         end
 
 
@@ -135,7 +140,10 @@ function Cube:determineState(contact)
         if contact.left then
             self.state = 'leftWall'
         elseif not contact.ceiling then
-            self.state = 'RightWall' -- 
+            self.state = 'rightWall' -- 
+
+            local xPositin, yPosition = self.body:getPosition()
+            self.body:setPosition(xPositin + pixelNudge, yPosition - pixelNudge)
         end
 
 
@@ -144,6 +152,9 @@ function Cube:determineState(contact)
             self.state = 'floor'
         elseif not contact.left then
             self.state = 'ceiling'
+
+            local xPositin, yPosition = self.body:getPosition()
+            self.body:setPosition(xPositin - pixelNudge, yPosition - pixelNudge)
         end
     end
 end
