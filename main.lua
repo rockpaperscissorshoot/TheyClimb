@@ -3,10 +3,11 @@ math.randomseed(os.time())
 
 love.physics.setMeter(64)
 
+-- since a meter is 64 pixels, gravity is 9.81 m/s^2 * 64 pixels/meter = 627.84 pixels/s^2 thansks mr Mac
 local CONFIG = {
     moveSpeed = 4,
     snapDistance = 10,
-    gravity = 0.981,
+    gravity = 9.81 * 64,
     cubeSize = 30,
 }
 
