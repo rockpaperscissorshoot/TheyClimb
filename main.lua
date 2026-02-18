@@ -3,11 +3,10 @@ math.randomseed(os.time())
 
 love.physics.setMeter(64)
 
--- since a meter is 64 pixels, gravity is 9.81 m/s^2 * 64 pixels/meter = 627.84 pixels/s^2 thansks mr Mac
 local CONFIG = {
     moveSpeed = 4,
     snapDistance = 10,
-    gravity = 9.81 * 64,
+    gravity = 9.81,
     cubeSize = 30,
 }
 
@@ -164,7 +163,7 @@ function Cube:applyMovement(deltaTime)
     local spiderForce = 2.0 * FPS_SCALE -- is a test value
     local velocityX = 0
     local velocityY = 0
-    local airResistance = 0.98 -- yeah i know CPU_HARD isnt adding air resistance cringe. guess what... i dont care (^^)
+    local airResistance = 0.998 -- yeah i know CPU_HARD isnt adding air resistance cringe. guess what... i dont care (^^)
 
     if self.state == 'air' then
         self.body:setGravityScale(1)
@@ -365,7 +364,7 @@ local function resetGame()
     cameraX = 0
 end
 
-local function drawUI() -- move this down dummy
+local function drawUI()
     local padding = 12
     local panelWidth = 200 --add a slight moving elastictiyty to moving later
     local panelHeight = 50
