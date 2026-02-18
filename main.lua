@@ -161,28 +161,44 @@ end
 
 function Cube:applyMovement(deltaTime)
     local speed = CONFIG.moveSpeed * FPS_SCALE -- isnt speed velocity without direction? maybe i should change the name of this variable to moveVelocity or something
-    local spiderForce = 1.0 * FPS_SCALE -- is a test value
-    local velocityX, velocityY = self:getVelocity()
+    local spiderForce = 2.0 * FPS_SCALE -- is a test value
+    local velocityX = 0
+    local velocityY = 0
+    local airResistance = 0.98 -- yeah i know CPU_HARD isnt adding air resistance cringe. guess what... i dont care (^^)
 
-    if self.state == 'floor' then
-        velocityX = speed 
-        velocityY = spiderForce
-        self.color = {r = 255, g = 0, b = 0}
+    if self.state == 'air' then
+        self.body:setGravityScale(1)
+        freeFallVelocityX, freeFallVelocityY = self:getVelocity()
+        velocityX = freeFallVelocityX * airResistance
+        velocityY = freeFallVelocityY -- acceleration is still the same
+        self.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
 
-    elseif self.state == 'rightWall' then
-        velocityX = spiderForce
-        velocityY = -speed
-        self.color = {r = 0, g = 255, b = 0}
-    elseif self.state == 'ceiling' then
-        velocityX = -speed
-        velocityY = -spiderForce
-        self.color = {r = 0, g = 0, b = 255}
-    elseif self.state == 'leftWall' then
-        velocityX = -spiderForce
-        velocityY = speed
-        self.color = {r = 255, g = 255, b = 0}
+        self.body:setLinearVelocity(velocityX, velocityY)
+
+    else
+        self.body:setGravityScale(0)
+
+        if self.state == 'floor' then
+            velocityX = speed
+            velocityY = spiderForce
+            self.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
+
+        elseif self.state == 'rightWall' then
+            velocityX = spiderForce
+            velocityY = -speed
+            self.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
+        elseif self.state == 'ceiling' then
+            velocityX = -speed
+            velocityY = -spiderForce
+            self.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
+        elseif self.state == 'leftWall' then
+            velocityX = -spiderForce
+            velocityY = speed
+            self.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
+        end
+
+        self:setVelocity(velocityX, velocityY)
     end
-    self:setVelocity(velocityX, velocityY)
 end
 
 function Cube:update(deltaTime, obstacles, canvasHeight, canvasWidth)
