@@ -39,14 +39,12 @@ function Cube:new(x, y, world)
     c.body:setFixedRotation(true)--Temporary, for testing
     c.shape = love.physics.newRectangleShape(CONFIG.cubeSize, CONFIG.cubeSize)
     c.fixture = love.physics.newFixture(c.body, c.shape,1) --Density of 1, for testing Change value around as needed
-    c.fixture:setFriction(0.2) --Friction of 0.5, for testing Change value around as needed
-    c.fixture:setRestitution(0.1) --Restitution of 0.1, for testing Change value around as needed
-
+    c.fixture:setFriction(0) 
+    c.fixture:setRestitution(0) 
     c.width = CONFIG.cubeSize
     c.height = CONFIG.cubeSize
     c.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
     c.state = 'air'
-    c.lastObsticle = nil
     return c
 end
 
@@ -58,10 +56,6 @@ function Cube:getY()
     return self.body:getY() - self.height / 2
 end
 
-function Cube:setPosition(x, y)
-    self.body:setPosition(x + self.width / 2, y + self.height / 2)
-end
-
 function Cube:getVelocity()
     return self.body:getLinearVelocity()
 end
@@ -71,7 +65,7 @@ function Cube:setVelocity(vx, vy)
 end
 
 function Cube:checkSensors(obstacles)
-    local margin = 2
+    local margin = 4
     local sensors = {   floor = false,
                         left = false,
                         right = false,
