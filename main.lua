@@ -217,9 +217,30 @@ function Cube:draw()
     yPosition = self:getY()
     xPosition = self:getX()
 
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b, 0.18)
+    if self.state == 'air' then
+        love.graphics.setColor((117/255), (255/255), (255/255), 0.18) 
+    elseif self.state == 'floor' then
+        love.graphics.setColor((255/255), (117/255), (255/255), 0.18)
+    elseif self.state == 'rightWall' then
+        love.graphics.setColor((255/255), (255/255), (117/255), 0.18)
+    elseif self.state == 'ceiling' then
+        love.graphics.setColor((117/255), (117/255), (255/255), 0.18)
+    elseif self.state == 'leftWall' then
+        love.graphics.setColor((117/255), (255/255), (117/255), 0.18)
+    end
+    --love.graphics.setColor(self.color.r, self.color.g, self.color.b, 0.18)
     love.graphics.rectangle("fill", xPosition - (CONFIG.cubeSize / 4), yPosition - (CONFIG.cubeSize / 4), self.width + (CONFIG.cubeSize / 2), self.height + (CONFIG.cubeSize / 2), (CONFIG.cubeSize / 4), (CONFIG.cubeSize / 4))
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b, 1.0)
+    if self.state == 'air' then
+        love.graphics.setColor((117/255), (255/255), (255/255), 1) 
+    elseif self.state == 'floor' then
+        love.graphics.setColor((255/255), (117/255), (255/255), 1)
+    elseif self.state == 'rightWall' then
+        love.graphics.setColor((255/255), (255/255), (117/255), 1)
+    elseif self.state == 'ceiling' then
+        love.graphics.setColor((117/255), (117/255), (255/255), 1)
+    elseif self.state == 'leftWall' then
+        love.graphics.setColor((117/255), (255/255), (117/255), 1)
+    end
     love.graphics.rectangle("fill", xPosition, yPosition, self.width, self.height, ((CONFIG.cubeSize / 4)-2), ((CONFIG.cubeSize / 4)-2))
     love.graphics.setColor(1, 1, 1, 1.0)
 
@@ -237,38 +258,38 @@ function Cube:draw()
 
     elseif self.state == 'rightWall' then
 
-        eyeXPosition1 = (CONFIG.cubeSize / 4) * 3
+        eyeXPosition1 = (CONFIG.cubeSize / 4) 
         eyeYPosition1 = (CONFIG.cubeSize / 4)
-        eyeXPosition2 = (CONFIG.cubeSize / 4) * 3
+        eyeXPosition2 = (CONFIG.cubeSize / 4)
         eyeYPosition2 = (CONFIG.cubeSize / 4) * 3
     
     elseif self.state == 'ceiling' then
 
-        eyeXPosition1 = (CONFIG.cubeSize / 4) * 3
+        eyeXPosition1 = (CONFIG.cubeSize / 4) 
         eyeYPosition1 = (CONFIG.cubeSize / 4) * 3
-        eyeXPosition2 = (CONFIG.cubeSize / 4) 
+        eyeXPosition2 = (CONFIG.cubeSize / 4) * 3
         eyeYPosition2 = (CONFIG.cubeSize / 4) * 3
 
     elseif self.state == 'leftWall' then
 
-        eyeXPosition1 = (CONFIG.cubeSize / 4)
-        eyeYPosition1 = (CONFIG.cubeSize / 4) * 3
-        eyeXPosition2 = (CONFIG.cubeSize / 4)
-        eyeYPosition2 = (CONFIG.cubeSize / 4)
+        eyeXPosition1 = (CONFIG.cubeSize / 4) *3
+        eyeYPosition1 = (CONFIG.cubeSize / 4) 
+        eyeXPosition2 = (CONFIG.cubeSize / 4) *3
+        eyeYPosition2 = (CONFIG.cubeSize / 4) *3 
 
     elseif self.state == 'air' then
 
-        eyeXPosition1 = (CONFIG.cubeSize / 4) * 2
+        eyeXPosition1 = (CONFIG.cubeSize / 4) 
         eyeYPosition1 = (CONFIG.cubeSize / 4)* 2
-        eyeXPosition2 = (CONFIG.cubeSize / 4) * 2
-        eyeYPosition2 = (CONFIG.cubeSize / 4)
+        eyeXPosition2 = (CONFIG.cubeSize / 4) * 3
+        eyeYPosition2 = (CONFIG.cubeSize / 4) *2
 
     end
 
-    love.graphics.setColor(1, 1, 1, 1.0)
-    love.graphics.circle("fill", math.floor(xPosition + eyeXPosition1), math.floor(yPosition + eyeYPosition1), CONFIG.cubeSize / 4)
-    love.graphics.setColor(1, 1, 1, 1.0)
-    love.graphics.circle("fill", math.floor(xPosition + eyeXPosition2), math.floor(yPosition + eyeYPosition2), CONFIG.cubeSize / 4)
+    love.graphics.setColor(0, 0, 0, 1.0)
+    love.graphics.circle("fill", math.floor(xPosition + eyeXPosition1), math.floor(yPosition + eyeYPosition1), CONFIG.cubeSize / 6)
+    love.graphics.setColor(0, 0, 0, 1.0)
+    love.graphics.circle("fill", math.floor(xPosition + eyeXPosition2), math.floor(yPosition + eyeYPosition2), CONFIG.cubeSize / 6)
 
 end
 
@@ -471,9 +492,4 @@ end
 function love.touchpressed(id, x, y, dx, dy, pressure)
     resetGame()
 end
---[[
-function love.resize(w, h)
-    windowWidth, windowHeight = w, h
-end
 
-]]
