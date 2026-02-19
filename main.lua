@@ -1,5 +1,7 @@
 love.window.setTitle("LÖVE They Climb Remake")
+love.window.setMode(1280, 720, {resizable = true, vsync = true})
 math.randomseed(os.time())
+
 
 love.physics.setMeter(64)
 
@@ -279,6 +281,7 @@ local windowWidth, windowHeight = love.graphics.getDimensions()
 local groundBaseHeight = windowHeight - 100
 local world = nil
 
+
 local function createPhysicsObstacle(world, xPosition, yPosition, width, height)
     local body = love.physics.newBody(world, xPosition + width / 2, yPosition + height / 2, "static")
     local shape = love.physics.newRectangleShape(width, height)
@@ -468,9 +471,9 @@ end
 function love.touchpressed(id, x, y, dx, dy, pressure)
     resetGame()
 end
-
+--[[
 function love.resize(w, h)
     windowWidth, windowHeight = w, h
 end
 
-
+]]
