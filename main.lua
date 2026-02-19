@@ -5,12 +5,11 @@ love.physics.setMeter(64)
 
 local CONFIG = {
     moveSpeed = 4,
-    snapDistance = 10,
     gravity = 9.81,
     cubeSize = 30,
 }
 
-local FPS_SCALE = 60 -- or 1 / love.timer.getDelta()
+local FPS_SCALE = 60
 
 local function NewAxisAlignedBoundingBox(x, y, width, height)
     return {
@@ -367,7 +366,7 @@ end
 local function drawUI()
     local padding = 12
     local panelWidth = 200 --add a slight moving elastictiyty to moving later
-    local panelHeight = 50
+    local panelHeight = 200
 
     love.graphics.push()
     love.graphics.origin()
@@ -383,27 +382,27 @@ local function drawUI()
     local function drawStat(yPosition, lable, active, color)
 
         love.graphics.setColor(1, 0, 1, 1)
-        love.graphics.circle('fill', 30, yPosition, 10)
+        love.graphics.circle('fill', 40, yPosition, 10)
         if active then
             love.graphics.setColor(0, 1, 0, 1)
-            love.graphics.circle('fill', 30 , yPosition, 10)
+            love.graphics.circle('fill', 40 , yPosition, 10)
         else
             love.graphics.setColor(1, 0, 1, 0.2)
-            love.graphics.circle('fill', 30, yPosition, 20)
+            love.graphics.circle('fill', 40, yPosition, 13)
 
         end
 
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(lable, 50, yPosition - 10)
+        love.graphics.print(lable, 60, yPosition - 10)
     end
 
-    local ystart = 50
+    local ystart = 80
 
     drawStat(ystart, "Floor ( go to the right)", player.state == 'floor', {r = 1, g = 1, b = 0})
-    drawStat(ystart + 20, "Right Wall ( go up)", player.state == 'rightWall', {r = 1, g = 1, b = 0})
-    drawStat(ystart + 40, "Ceiling ( go to the left)", player.state == 'ceiling', {r = 1, g = 1, b = 0})
-    drawStat(ystart + 60, "Left Wall ( go down)", player.state == 'leftWall', {r = 1, g = 1, b = 0})
-    drawStat(ystart + 80, "Air ( falling)", player.state == 'air', {r = 1, g = 1, b = 0})
+    drawStat(ystart + 25, "Right Wall ( go up)", player.state == 'rightWall', {r = 1, g = 1, b = 0})
+    drawStat(ystart + 50, "Ceiling ( go to the left)", player.state == 'ceiling', {r = 1, g = 1, b = 0})
+    drawStat(ystart + 75, "Left Wall ( go down)", player.state == 'leftWall', {r = 1, g = 1, b = 0})
+    drawStat(ystart + 100, "Air ( falling)", player.state == 'air', {r = 1, g = 1, b = 0})
 
     love.graphics.setColor(0.5, 0.5, 0.5, 1)
     love.graphics.print("Distance: " .. tostring(distance), 30, ystart + 120)
