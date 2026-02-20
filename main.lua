@@ -6,7 +6,7 @@ math.randomseed(os.time())
 love.physics.setMeter(64)
 
 local CONFIG = {
-    moveSpeed = 4,
+    moveSpeed = 0.5,
     gravity = 9.81,
     cubeSize = 30,
 }
@@ -105,7 +105,7 @@ end
 
 function Cube:determineState(contact)
 
-    local pixelNudge = 5 
+    local pixelNudge = 7 
 
     if self.state == 'air' then
         if contact.floor then
@@ -115,11 +115,13 @@ function Cube:determineState(contact)
         elseif contact.ceiling then
             self.state = 'ceiling'
         elseif contact.left then
-            self.state = 'leftWall'
+            --self.state = 'leftWall'
         end
 
 
     elseif self.state == 'floor' then
+        local xPosition, yPosition = self.body:getPosition()
+        self.body:setPosition(xPosition, yPosition - (pixelNudge - (pixelNudge-2)))
         if contact.right then
             self.state = 'rightWall'
         elseif not contact.floor then
@@ -128,6 +130,8 @@ function Cube:determineState(contact)
 
 
     elseif self.state == 'rightWall' then
+        local xPosition, yPosition = self.body:getPosition()
+        self.body:setPosition(xPosition , yPosition - (pixelNudge - (pixelNudge-2)))
         if contact.ceiling then
             self.state = 'ceiling'
         elseif not contact.right then
@@ -144,7 +148,7 @@ function Cube:determineState(contact)
             self.state = 'rightWall' -- 
 
             local xPositin, yPosition = self.body:getPosition()
-            self.body:setPosition(xPositin + pixelNudge, yPosition - pixelNudge)
+            self.body:setPosition(xPositin, yPosition - pixelNudge)
         end
 
 
@@ -155,7 +159,7 @@ function Cube:determineState(contact)
             self.state = 'ceiling'
 
             local xPositin, yPosition = self.body:getPosition()
-            self.body:setPosition(xPositin - pixelNudge, yPosition - pixelNudge)
+            self.body:setPosition(xPositin - (pixelNudge+3), yPosition - pixelNudge)
         end
     end
 end
