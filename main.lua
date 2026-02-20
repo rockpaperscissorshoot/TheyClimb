@@ -48,6 +48,7 @@ function Cube:new(x, y, world)
     return c
 end
 
+
 function Cube:getX()
     return self.body:getX() - self.width / 2
 end
@@ -378,7 +379,7 @@ local distance = 0
 
 local function resetGame()
     obstacles = {}
-    phyisicsObastacles = {}
+    physicsObastacles = {}
     loadedChuncks = 0
     world = love.physics.newWorld(0, CONFIG.gravity * FPS_SCALE, true)
     generateTerrain(0, world)
@@ -432,7 +433,7 @@ local function drawUI()
     love.graphics.print("Distance: " .. tostring(distance), 30, ystart + 120)
     love.graphics.pop()
 
-    local hint = " if you press the mouse button (the left one) you reset the game. this is experimental and will be removed later so have fun for now"
+    local hint = " if you press the 'R' key you reset the game. this is experimental and will be removed later so have fun for now"
     love.graphics.setColor(1, 1, 1, 0.5)
     love.graphics.print(hint, 20, love.graphics.getHeight() - 40)
 end
@@ -448,7 +449,7 @@ function love.update(dt)
         generateTerrain(loadedChuncks, world)
     end
 
-    if #obstacles > 50 then -- soon this is going to get really big so starting at 50 is good for now
+    if #obstacles > 1000 then -- soon this is going to get really big so starting at 50 is good for now
         table.remove(obstacles, 1)
         if #physicsObastacles > 0 then
             table.remove(physicsObastacles, 1)
@@ -460,7 +461,7 @@ function love.update(dt)
     distance = math.floor(player:getX() / 10) 
 
     local targetCameraX = player:getX() - (love.graphics.getWidth() / 3)
-    cameraX = cameraX + (targetCameraX - cameraX) * 0.1 -- this is the elastic camera movement makes it look good. or in simpler terms this is a lerp durhh
+    cameraX = cameraX + (targetCameraX - cameraX) * 0.01 -- this is the elastic camera movement makes it look good. or in simpler terms this is a lerp durhh
 end
 
 function love.draw()
@@ -485,11 +486,29 @@ function love.draw()
     drawUI()
 end
 
+function spawnSquareAtMouse(x, y, button)
+    local worldX = x + cameraX
+    local worldY = y
+    table.insert(obstacles, NewAxisAlignedBoundingBox(worldX, worldY, 3, 3))
+    table.insert(physicsObastacles, createPhysicsObstacle(world, worldX, worldY, 3, 3))
+end
+--[[
 function love.mousepressed(x, y, button)
-    resetGame()
+    spawnSquareAtMouse(x, y, button)
 end
 
+]]
+function love.mousemoved(x, y, dx, dy, istouch)
+    if love.mouse.isDown(1) then
+        spawnSquareAtMouse(x, y, 1)
+    end
+end
 function love.touchpressed(id, x, y, dx, dy, pressure)
-    resetGame()
+    spawnSquareAtMouse(x, y, button)
+end
+function love.keypressed(key)
+    if key == "r" then
+        resetGame()
+    end
 end
 
