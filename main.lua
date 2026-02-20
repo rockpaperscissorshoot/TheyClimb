@@ -492,12 +492,7 @@ function spawnSquareAtMouse(x, y, button)
     table.insert(obstacles, NewAxisAlignedBoundingBox(worldX, worldY, 3, 3))
     table.insert(physicsObastacles, createPhysicsObstacle(world, worldX, worldY, 3, 3))
 end
---[[
-function love.mousepressed(x, y, button)
-    spawnSquareAtMouse(x, y, button)
-end
 
-]]
 function love.mousemoved(x, y, dx, dy, istouch)
     if love.mouse.isDown(1) then
         spawnSquareAtMouse(x, y, 1)
