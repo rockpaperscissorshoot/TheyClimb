@@ -6,7 +6,7 @@ math.randomseed(os.time())
 love.physics.setMeter(64)
 
 local CONFIG = {
-    moveSpeed = 0.5,
+    moveSpeed = 6.7,
     gravity = 9.81,
     cubeSize = 30,
 }
@@ -121,7 +121,7 @@ function Cube:determineState(contact)
 
     elseif self.state == 'floor' then
         local xPosition, yPosition = self.body:getPosition()
-        self.body:setPosition(xPosition, yPosition - (pixelNudge - (pixelNudge-2)))
+        --self.body:setPosition(xPosition, yPosition - (pixelNudge - (pixelNudge-2)))
         if contact.right then
             self.state = 'rightWall'
         elseif not contact.floor then
@@ -131,7 +131,7 @@ function Cube:determineState(contact)
 
     elseif self.state == 'rightWall' then
         local xPosition, yPosition = self.body:getPosition()
-        self.body:setPosition(xPosition , yPosition - (pixelNudge - (pixelNudge-2)))
+        --self.body:setPosition(xPosition , yPosition - (pixelNudge - (pixelNudge-2)))
         if contact.ceiling then
             self.state = 'ceiling'
         elseif not contact.right then
@@ -202,7 +202,66 @@ function Cube:applyMovement(deltaTime)
             self.color = {r = math.random(0, 255), g = math.random(0, 255), b = math.random(0, 255)}
         end
 
-        self:setVelocity(velocityX, velocityY)
+        --self:setVelocity(velocityX, velocityY)
+
+        --[[ lets do some physics 
+        currently what i'm doing is updateing the velocity of the cube to mimic the velocity of a uniforn cube. 
+        how ever velocity as a uniform function isnt okay as i can run fast but cant climb as fast. 
+        It's for that reason that the player cannot continue having velocity as it's main movement. 
+        So instead now i need force. Step 1 is to find the initial velocity i already have. 
+
+        VelocityX == speed
+        speed == 0.5m/s
+        therefore targetVelocityX == 0.5m/s
+        now we need the chart. I want to know how much force i need to apply to get to 0.5m/s in 1 second.
+        X      |   Y
+        _______|______
+        v=0.5  |Vi = 0
+        d=0.5  |Vf = not needed
+        t= 1   |a = not needed
+               |d = not needed
+               |t = not needed
+
+        acceleration = change in delta velocity / time
+
+        acceleration = (Vfinalx - Vinitialx)/timer
+
+        acceleration = NetForce/mass
+        NetForce = mass * acceleration
+        NetForce = mass * (change in delta velocity / time)
+        Netforce = mass * ((Vfinalx - Vinitialx)/time)
+        therefore this will need to be the equation we use. Thanks mr Mac
+
+        mass =  self.body:getMass() 
+        local netForcex
+        local acceleration
+        targetVelocityX = speed
+        velocityX, velocityY = self:getVelocity()
+
+
+        acceleration = (targetVelocityX - velocityX) / deltaTime
+
+        netForceX = mass * acceleration
+        self.body:applyForce(netForceX, 0)
+        ]]
+        
+        mass =  self.body:getMass() 
+        local netForceX
+        local acceleration
+        targetVelocityX = -speed
+        targetVelocityY = speed
+
+        
+        velocityX, velocityY = self:getVelocity()
+
+
+        accelerationX = (-velocityX - targetVelocityX) / deltaTime
+        accelerationY = (- velocityY - targetVelocityY) / deltaTime
+
+        netForceX = mass * accelerationX
+        netForceY = mass * accelerationY
+        self.body:applyForce(netForceX, netForceY)
+        
     end
 end
 
