@@ -6,8 +6,8 @@ math.randomseed(os.time())
 love.physics.setMeter(64)
 
 local CONFIG = {
-    moveSpeed = 6.7,
-    gravity = 9.81,
+    moveSpeed = 0.3167,
+    gravity = 9.8167,
     cubeSize = 30,
 }
 
@@ -105,7 +105,7 @@ end
 
 function Cube:determineState(contact)
 
-    local pixelNudge = 7 
+    local pixelNudge = 3
 
     if self.state == 'air' then
         if contact.floor then
@@ -181,7 +181,7 @@ function Cube:applyMovement(deltaTime)
         self.body:setLinearVelocity(velocityX, velocityY)
 
     else
-        self.body:setGravityScale(0)
+        self.body:setGravityScale(1)
 
         if self.state == 'floor' then
             velocityX = speed
@@ -248,15 +248,15 @@ function Cube:applyMovement(deltaTime)
         mass =  self.body:getMass() 
         local netForceX
         local acceleration
-        targetVelocityX = -speed
-        targetVelocityY = speed
+        targetVelocityX = velocityX
+        targetVelocityY = velocityY
 
         
         velocityX, velocityY = self:getVelocity()
 
 
-        accelerationX = (-velocityX - targetVelocityX) / deltaTime
-        accelerationY = (- velocityY - targetVelocityY) / deltaTime
+        accelerationX = (targetVelocityX - velocityX) / deltaTime
+        accelerationY = (targetVelocityY - velocityY) / deltaTime
 
         netForceX = mass * accelerationX
         netForceY = mass * accelerationY
@@ -388,8 +388,8 @@ local function generateTerrain(startPositionX, world)
         local type = math.random()
         if type > 0.6 then
 
-            local width = math.random(250, 350) -- i'll change this when imight need to add diffrent climbing
-            local height = math.random(150, 250) -- same with this one
+            local width = math.random(50, 450) -- i'll change this when imight need to add diffrent climbing
+            local height = math.random(50, 350) -- same with this one
 
             table.insert(obstacles, NewAxisAlignedBoundingBox(x, groundBaseHeight, width, height))
             table.insert(physicsObastacles, createPhysicsObstacle(world, x, groundBaseHeight, width, height))
@@ -408,8 +408,8 @@ local function generateTerrain(startPositionX, world)
             x = x + width
         elseif type > 0.3 then
 
-            local width = math.random(150, 250) --
-            local height = math.random(150,250)
+            local width = math.random(50, 350) --
+            local height = math.random(50,350)
 
             table.insert(obstacles, NewAxisAlignedBoundingBox(x, groundBaseHeight, width, height))
             table.insert(physicsObastacles, createPhysicsObstacle(world, x, groundBaseHeight, width, height))
