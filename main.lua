@@ -4,19 +4,19 @@ function love.load()
     love.window.setTitle("Procedural Terrain Generation")
     love.graphics.setBackgroundColor(0.5, 0.7, 1) -- Sky color
     width, height = love.graphics.getDimensions()
-    terrain = generateTerrain(width, height)
+    terrain = generateHeightmap(width, height)
 end
 
-function generateTerrain(width, height)
-    local terrain = {}
+function generateHeightmap(width, height)
+    local heightmap = {}
     for x = 1, width do
-        terrain[x] = {}
+        heightmap[x] = {}
         for y = 1, height do
-            local noiseValue = perlin.perlin2d(x / 100, y / 100)
-            terrain[x][y] = noiseValue
+            local noiseValue = perlin.perlin2d(x / 5, y / 5)
+            heightmap[x][y] = noiseValue
         end
     end
-    return terrain
+    return heightmap
 end
 
 function love.draw()
@@ -24,7 +24,15 @@ function love.draw()
         for y = 1, #terrain[x] do
             local value = terrain[x][y]
             local color = value * 255
-            love.graphics.setColor(color / 255, color / 255, color / 255)
+            if value < 0.3 then
+                love.graphics.setColor(0, 0, 1) -- Water
+            elseif value < 0.5 then
+                love.graphics.setColor(0, 1, 0) -- Grass
+            elseif value < 0.7 then
+                love.graphics.setColor(0.5, 0.5, 0) -- Sand
+            else
+                love.graphics.setColor(1, 1, 1) -- Snow
+            end
             love.graphics.points(x, y)
         end
     end

@@ -6,7 +6,7 @@ local band = bit.band
 local bxor = bit.bxor
 
 local module = {
-  seed = 22345129
+  seed = math.random(0, 100000)
 }
 
 local function int_noise(x)
