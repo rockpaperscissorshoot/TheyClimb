@@ -1,1 +1,66 @@
 Um this is here so people can read about this project. I'm trying to completly remake the project TheyClimb by Hatmix and hopefully with theyre premission make it into a full game. Feel free to check out their project it's awesome and i'm going to try and improve on it if it's even possible. I would like if the player could walk on a procedural floor so that my next step
+
+
+-- log  of what i've been doing for the past week. I've downloaded and tested out a few procedural world generator and landed on the best one i've found so far that actually doesnt use perlin noise or perlin semplex noise in love 2d to completly generate it's stuctures. Anyways the one that i loike is by a person called "Jeffrey Morais". Who recreated how terraria does its world generation.
+
+so next steps for me is to digest and understand what he's doing to get this look.
+
+He starts with a mathematical foundation. Basically a sine wave with noise affecting it that is reffered to as an octave. It's not actually a sine wave but it looks like one to me sooooooo. Diffrent biome has diffrent octaves. he then provides what type of parameters you would see for any biome.
+
+def perlin_1d(x, frequency=0.01, octaves=4, amplitude=30):
+    """Generate 1D Perlin noise for terrain height variation"""
+    height = 0
+    current_amplitude = amplitude
+    current_frequency = frequency
+    
+    for _ in range(octaves):
+        height += current_amplitude * noise_gen.noise2d(x * current_frequency, 0)
+        current_amplitude *= persistence
+        current_frequency *= 2
+    
+    return height
+
+if love 2d the function would look like:
+
+x =x 
+frqunecy = 0.01
+octaves = 4
+amplictude = 30
+
+function perlin1D(x,frequency, octaves, amplitude)
+    -- generate 1D perlin noise for terrain heifght variation
+    height = 0
+    current_amplitude = amplitude
+    current_frequency = frequnecy
+
+    for i=0 , octaves
+        height = height + currentamplitude * love.math.noise(x*frequency, 0)
+        current_amplitude = current_amplitude*persistence
+        current_frequency = Current_frequency*2
+    
+    return height
+
+then theres so biom disitruibution which is nich but i dont plan on being to fancy with the placement s of biomes in my game.
+
+then he provides us caves which look cool but i'm not exactly looking for that kind of generation. however if your intreated on how they do it. it's a perlin2d line that super imposed on the terrain you alreay generated. However what i beilie is better to show cave genertion is something that i'll be using thats called tile runner. kind of like ants, the tile runner starts randomly at the surface then takes random paterrns going deeper in the surface. It's really really cool and i think you should check it out. "https://forum.gamemaker.io/index.php?threads/randomly-generated-terrain-using-tile-runners.53100/" This way i can limit the radius, lenth and number of caves i get instead of using the other method. Anyways continuing on with "jefferey morray".he goes in to a lot more detail about biomes transitioning. This is  imoprotant as providing a smooth transition is nessart to the feel and look of a game however i'c completly lost here and have no clue waht this means :
+
+Smooth biome transitions using gradient interpolation:
+
+blend(x) = biome1 * (1-t) + biome2*t
+
+where t = sigmoid((distance - center)/width) + noise(x)
+
+like theres no way your gonna make me (67 in math btw) do more math with something called a sigmoid, whatever that it. Anyways continouing on in the documetn he provides more detail on ore distribution. I lowkey dont play terraria so i didnt know it had ore. I starting to think it has more similarities to minecraft then the game i'm making but oh well. he also talks about structure placement.
+
+finally he get this. 
+
+https://github.com/IsolatedSingularity/Terraria-Generation/blob/main/Code+/world_generation_process.gif
+
+and this
+
+Passes 1-5: Surface terrain using multi-octave noise
+Passes 6-25: Cave carving with TileRunner algorithm
+Passes 26-45: Biome placement and conversion
+Passes 46-60: Structure generation and placement
+
+soo with all that i've learned it's time to start cooding. 
