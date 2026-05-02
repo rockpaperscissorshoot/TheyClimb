@@ -28,8 +28,8 @@ function love.update(dt)
     local cameraTargetX = box.body:getX() - love.graphics.getWidth() / 2
     local cameraTargetY = box.body:getY() - love.graphics.getHeight() / 2
 
-    cameraX = cameraX + (cameraTargetX - cameraX) * 0.1
-    cameraY = cameraY + (cameraTargetY - cameraY) * 0.1
+    cameraX = cameraX + (cameraTargetX - cameraX) * 0.067
+    cameraY = cameraY + (cameraTargetY - cameraY) * 0.067
 end
 
 function love.draw()
