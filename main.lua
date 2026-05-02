@@ -1,3 +1,5 @@
+love.window.setMode(800,800, {resizable=true, vsync=true})
+
 local world
 local ground
 local box
@@ -14,7 +16,7 @@ local sliderModule = {
     width = 200,
     height = 20,
     minZoom = 0.1,
-    maxZoom = 4.0,
+    maxZoom = 16.0,
     draggingSlider = false,
     knobSize = 20,
 }
@@ -25,7 +27,7 @@ function love.load()
     ground = {}
     box = {}
     ground.body = love.physics.newBody(world, 400, 550, "static")
-    ground.shape = love.physics.newRectangleShape(800, 100)
+    ground.shape = love.physics.newRectangleShape(1600, 100)
     ground.fixture = love.physics.newFixture(ground.body, ground.shape)
 
 
@@ -39,11 +41,11 @@ end
 
 function love.update(dt)
 
-    box.body:applyForce(80, 0)  
+    box.body:applyForce(0, 0)  
     world:update(dt)
 
-    cameraTargetX = box.body:getX() - love.graphics.getWidth() / 2
-    cameraTargetY = box.body:getY() - love.graphics.getHeight() / 2
+    cameraTargetX = box.body:getX()
+    cameraTargetY = box.body:getY() 
 
     cameraX = cameraX + (cameraTargetX - cameraX) * 0.067
     cameraY = cameraY + (cameraTargetY - cameraY) * 0.067
@@ -77,14 +79,17 @@ function drawSlider()
     local sliderHeight = sliderModule.height
 
     love.graphics.setColor(0.8, 0.8, 0.8)
-    love.graphics.rectangle("fill", sliderX, sliderY- sliderHeight/2, sliderWidth, sliderHeight)
+    love.graphics.rectangle("fill", sliderX, sliderY-sliderHeight/2, sliderWidth, sliderHeight)
 
     local sliderValue = (cameraZoom - sliderModule.minZoom) / (sliderModule.maxZoom - sliderModule.minZoom)
     sliderValue = math.max(0, math.min(1, sliderValue))
     local knobX = sliderX + sliderValue * (sliderWidth)
     local knobY = sliderY
     love.graphics.setColor(0.4, 0.4, 0.4)
-    love.graphics.rectangle("fill", knobX, sliderModule.y - (sliderModule.knobSize - sliderModule.height) / 2, sliderModule.knobSize, sliderModule.knobSize)
+    love.graphics.circle("fill", knobX, sliderModule.y - (sliderModule.knobSize - sliderModule.height) / 2, sliderModule.knobSize)
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print(string.format("Zoom: %.2f", cameraZoom), sliderX, sliderY + 30)
 end
 
 function love.mousepressed(x, y, button)
@@ -111,7 +116,7 @@ function ismouseOnKnob(x, y)
     local sliderValue = (cameraZoom - sliderModule.minZoom) / (sliderModule.maxZoom - sliderModule.minZoom)
     sliderValue = math.max(0, math.min(1, sliderValue))
     local knobX = sliderModule.x + sliderValue * (sliderModule.width)
-    local knobY = sliderModule.y
+    local knobY = sliderModule.y 
 
     return math.distance(x, y, knobX, knobY) < sliderModule.knobSize + 2
 end
