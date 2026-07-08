@@ -38,3 +38,11 @@ end
 function love.mousereleased(x,y, button)
     ui.mousereleased(x,y, button)
 end
+
+function love.keypressed(key)
+    if key == "space" then
+        local screenX, screenY = love.mouse.getPosition()
+        local worldX, worldY = camera.screenToWorld(screenX, screenY)
+        world.spawnCube(worldX, worldY)
+    end
+end

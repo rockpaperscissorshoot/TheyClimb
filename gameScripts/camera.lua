@@ -4,7 +4,7 @@ local camera = {
     cameraTargetX = 0,
     cameraTargetY = 0,
     cameraLerpSpeed = 0.067,
-    cameraZoom = 1
+    cameraZoom = 0.34
 }
 
 function camera.load()
@@ -30,6 +30,14 @@ end
 
 function camera.off()
     love.graphics.pop()
+end
+
+function camera.screenToWorld(ScreenX, ScreenY)
+    local screenWidth = love.graphics.getWidth()
+    local screenHeight = love.graphics.getHeight()
+    local worldX = (ScreenX - screenWidth / 2) / camera.cameraZoom + camera.x
+    local worldY = (ScreenY - screenHeight / 2) / camera.cameraZoom + camera.y
+    return worldX, worldY
 end
 
 return camera
