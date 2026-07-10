@@ -17,6 +17,12 @@ function world.load()
 end
 
 function world.update(dt)
+
+    if world.grabbed then
+        world.grabbed.body:setPosition(world.grabbedTargetX, world.grabbedTargetY)
+        world.grabbed.body:setLinearVelocity(0, 0)
+    end
+
     world.physicsWorld:update(dt)
 end
 
@@ -37,9 +43,24 @@ function world.spawnCube(x, y)
     local body = love.physics.newBody(world.physicsWorld, x, y, "dynamic")
     local shape = love.physics.newRectangleShape(30,30)
     local fixture = love.physics.newFixture(body, shape, 1)
-    table.insert(world.dynamicObjects, {body = body, shape =shape, fixture = fixture})
-
+    local object = {body = body, shape = shape, fixture = fixture}
+    table.insert(world.dynamicObjects, object)
+    return object
 end
 
+function world.setGrabbed(object)
+    world.grabbed = object
+    object.body:setType("kinematic")
+    object.body:setPosition(world.grabbedTargetX, world.grabbedTargetY)
+    object.body:setLinearVelocity(0, 0)
+end
+
+function world.releaseGrabbed()
+    if world.grabbed then
+        world.grabbed.body:setType("dynamic")
+        world.grabbed.body:setLinearVelocity(0, 0)
+        world.grabbed = nil
+    end
+end
 
 return world

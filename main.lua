@@ -14,6 +14,12 @@ function love.load()
 end
 
 function love.update(dt)
+
+    local screenX, screenY = love.mouse.getPosition()
+    local worldX, worldY = camera.screenToWorld(screenX, screenY)
+    world.grabbedTargetX = worldX
+    world.grabbedTargetY = worldY
+
     player.update(dt)
     world.update(dt)
     camera.update(dt, player.getbody())
@@ -41,8 +47,17 @@ end
 
 function love.keypressed(key)
     if key == "space" then
-        local screenX, screenY = love.mouse.getPosition()
-        local worldX, worldY = camera.screenToWorld(screenX, screenY)
-        world.spawnCube(worldX, worldY)
+        if not world.grabbed then
+            local screenX, screenY = love.mouse.getPosition()
+            local worldX, worldY = camera.screenToWorld(screenX, screenY)
+            local object = world.spawnCube(worldX, worldY)
+            world.setGrabbed(object)
+        end
+    end
+end
+
+function love.keyreleased(key)
+    if key == "space" then
+        world.releaseGrabbed()
     end
 end
