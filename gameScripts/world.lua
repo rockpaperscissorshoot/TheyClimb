@@ -4,7 +4,6 @@ world.dynamicObjects = {}
 local ground
 
 function world.load()
-
     love.physics.setMeter(64)
     world.physicsWorld = love.physics.newWorld(0, 9.81 * 64, true)
 
@@ -17,7 +16,6 @@ function world.load()
 end
 
 function world.update(dt)
-
     if world.grabbed then
         world.grabbed.body:setPosition(world.grabbedTargetX, world.grabbedTargetY)
         world.grabbed.body:setLinearVelocity(0, 0)
@@ -27,7 +25,6 @@ function world.update(dt)
 end
 
 function world.draw()
-
     --ground
     love.graphics.setColor(0.28, 0.63, 0.05)
     love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints()))
